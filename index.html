@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Audio Glitcher</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "seedrandom": "https://esm.sh/seedrandom@3.0.5"
+    }
+  }
+  </script>
+</head>
+<body>
+  <main id="app">
+    <div class="controls">
+      <div class="row">
+        <input id="file" type="file" accept="audio/*" aria-label="Load audio" />
+        <label class="live">
+          <input id="liveToggle" type="checkbox" /> Live Input
+        </label>
+      </div>
+
+      <div id="liveDesc" class="mode-desc" aria-live="polite">Use your microphone as the realtime audio source for glitching; toggle to enable live input.</div>
+
+      <div class="row">
+        <button id="play" class="btn" disabled>Play</button>
+        <button id="stop" class="btn" disabled>Stop</button>
+        <button id="randomize" class="btn">Randomize</button>
+      </div>
+
+      <label class="field">
+        <span>Glitch Mode</span>
+        <select id="mode">
+          <option value="stutter">Stutter</option>
+          <option value="bitcrush">Bitcrusher</option>
+          <option value="bufferShuffle">Buffer Shuffle</option>
+          <option value="tapestop">Tape Stop</option>
+          <option value="granular">Granular</option>
+          <option value="reverse">Reverse (offline)</option>
+          <option value="glitchGate">Glitch Gate</option>
+          <option value="pitchDrop">Pitch Drop</option>
+          <option value="vinylScratch">Vinyl Scratch</option>
+          <option value="bassBoost">Bass Boost (experimental)</option>
+          <option value="audioCorrupt">Audio Corrupt (experimental)</option>
+        </select>
+        <div id="modeDesc" class="mode-desc" aria-live="polite"></div>
+      </label>
+
+      <label class="field">
+        <span>Intensity</span>
+        <input id="intensity" type="range" min="0" max="1" step="0.01" value="0.5" />
+      </label>
+
+      <label class="field">
+        <span>Rate / Size</span>
+        <input id="param" type="range" min="0.01" max="1" step="0.01" value="0.2" />
+      </label>
+
+      <div class="row small">
+        <button id="render" class="btn" disabled>Render & Download</button>
+        <a id="download" class="btn disabled" download="glitched.wav">Download</a>
+      </div>
+
+      <div class="meter">
+        <div id="meterFill"></div>
+      </div>
+    </div>
+    <div class="visual">
+      <canvas id="viz"></canvas>
+    </div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

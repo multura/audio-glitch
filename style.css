@@ -1,0 +1,30 @@
+:root{
+  --bg:#0b0b0b;
+  --panel:#0b0b0b;
+  --accent:#ffffff;
+  --muted:#9aa3ad;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+*{box-sizing:border-box}
+html,body,#app{height:100%;margin:0;background:var(--bg);color:var(--accent)}
+#app{display:flex;flex-direction:column;align-items:stretch;padding:12px;gap:10px;height:100vh}
+.controls{background:var(--panel);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:170px;border:1px solid #222}
+.row{display:flex;gap:8px;align-items:center}
+.row.small{align-items:center}
+.btn{background:transparent;color:var(--accent);border:1px solid #666;padding:8px 10px;font-weight:600;min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+.btn.disabled, .btn[disabled]{opacity:0.4;pointer-events:none}
+input[type="file"]{color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field span{font-size:12px;color:var(--muted)}
+input[type="range"], select{height:36px;background:transparent;border:1px solid #333;padding:6px;color:var(--accent)}
+.mode-desc{font-size:12px;color:var(--muted);margin-top:6px;min-height:34px;line-height:1.2}
+.meter{height:8px;background:#070707;overflow:hidden;border:1px solid #222}
+#meterFill{height:100%;width:0%;background:var(--accent)}
+.visual{flex:1;display:flex;align-items:center;justify-content:center;min-height:120px;border:1px solid #222}
+canvas{width:100%;height:100%;background:transparent}
+.live{color:var(--muted);font-size:13px;display:flex;gap:6px;align-items:center}
+@media (max-width:700px){
+  #app{padding:10px}
+  .controls{padding:8px}
+  .visual{min-height:120px}
+}

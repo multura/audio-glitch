@@ -90,7 +90,7 @@ fileIn.addEventListener('change', async (e)=>{
 liveToggle.addEventListener('change', async ()=>{
   const liveDesc = document.getElementById('liveDesc');
   if(liveToggle.checked){
-    liveDesc.textContent = 'Requesting microphone access…';
+    liveDesc.textContent = 'LIVE INPUT: Requesting microphone access…';
     try{
       micStream = await navigator.mediaDevices.getUserMedia({audio:true});
       if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -98,17 +98,17 @@ liveToggle.addEventListener('change', async ()=>{
       playBtn.disabled = false;
       stopBtn.disabled = false;
       renderBtn.disabled = true;
-      liveDesc.textContent = 'Microphone active — using live input for realtime glitching.';
+      liveDesc.textContent = 'LIVE INPUT: Microphone active - using live input for realtime glitching.';
     }catch(e){
       liveToggle.checked = false;
-      liveDesc.textContent = 'Microphone access denied or unavailable.';
+      liveDesc.textContent = 'LIVE INPUT: Microphone access denied or unavailable.';
       console.warn('mic denied', e);
     }
   }else{
     stopMic();
     if(!currentBuffer) playBtn.disabled = true;
     renderBtn.disabled = currentBuffer ? false : true;
-    liveDesc.textContent = 'Use your microphone as the realtime audio source for glitching; toggle to enable live input.';
+    liveDesc.textContent = 'LIVE INPUT: Use your microphone as the realtime audio source for glitching; toggle to enable live input.';
   }
 });
 

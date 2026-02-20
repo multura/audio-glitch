@@ -1,6 +1,6 @@
 # Audio Glitcher
 
-A small web-based realtime and offline audio "glitch" playground. Load an audio file or use your microphone, pick a glitch mode, tweak intensity and rate/size, then play or render an offline glitched WAV for download.
+A small web-based realtime and offline audio "glitch" playground. Load an audio (or video) file or use your microphone, pick a glitch mode, tweak intensity and rate/size, then play or render an offline glitched WAV for download.
 
 Features
 - Realtime glitching (with microphone or loaded file) using Web Audio nodes and ScriptProcessor fallbacks.

@@ -23,7 +23,7 @@
         </label>
       </div>
 
-      <div id="liveDesc" class="mode-desc" aria-live="polite">Use your microphone as the realtime audio source for glitching; toggle to enable live input.</div>
+      <div id="liveDesc" class="mode-desc" aria-live="polite">LIVE INPUT: Use your microphone as the realtime audio source for glitching; toggle to enable live input.</div>
 
       <div class="row">
         <button id="play" class="btn" disabled>Play</button>
@@ -36,15 +36,17 @@
         <select id="mode">
           <option value="stutter">Stutter</option>
           <option value="bitcrush">Bitcrusher</option>
-          <option value="bufferShuffle">Buffer Shuffle</option>
           <option value="tapestop">Tape Stop</option>
           <option value="granular">Granular</option>
-          <option value="reverse">Reverse (offline)</option>
           <option value="glitchGate">Glitch Gate</option>
           <option value="pitchDrop">Pitch Drop</option>
           <option value="vinylScratch">Vinyl Scratch</option>
-          <option value="bassBoost">Bass Boost (experimental)</option>
-          <option value="audioCorrupt">Audio Corrupt (experimental)</option>
+        <optgroup label="experemental">
+          <option value="reverse">Reverse (offline)</option>
+          <option value="bufferShuffle">Buffer Shuffle</option>
+          <option value="bassBoost">Bass Boost</option>
+          <option value="audioCorrupt">Audio Corrupt</option>
+        </optgroup>
         </select>
         <div id="modeDesc" class="mode-desc" aria-live="polite"></div>
       </label>
@@ -60,7 +62,7 @@
       </label>
 
       <div class="row small">
-        <button id="render" class="btn" disabled>Render & Download</button>
+        <button id="render" class="btn" disabled>Render</button>
         <a id="download" class="btn disabled" download="glitched.wav">Download</a>
       </div>
 

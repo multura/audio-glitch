@@ -35,12 +35,50 @@ function updateMeter(val){
   meterFill.style.width = `${Math.min(100, Math.max(0, val*100))}%`;
 }
 
+/* ensure an AudioContext exists / is unlocked on user interaction (helps iPhone/Safari) */
+function ensureAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // try to resume if suspended (iOS requires user gesture)
+  if(audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(()=>{/* ignore */});
+  }
+}
+
+/* robust decoder to support older Safari callback-style decodeAudioData */
+async function decodeAudioBuffer(arrBuffer){
+  // prefer promise-style if available
+  try{
+    // some browsers return a promise
+    const decoded = await audioCtx.decodeAudioData(arrBuffer.slice(0));
+    return decoded;
+  }catch(err){
+    // fallback for callback-style decodeAudioData
+    return await new Promise((resolve, reject)=>{
+      try{
+        audioCtx.decodeAudioData(arrBuffer.slice(0), resolve, reject);
+      }catch(e){
+        reject(e);
+      }
+    });
+  }
+}
+
+/* create/unlock audio context on user gestures that commonly appear on iOS */
+['click','touchstart','keydown'].forEach(evt=>{
+  window.addEventListener(evt, ensureAudioCtx, {passive:true, once:true});
+});
+
 fileIn.addEventListener('change', async (e)=>{
   const f = e.target.files && e.target.files[0];
   if(!f) return;
-  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  ensureAudioCtx();
   const arr = await f.arrayBuffer();
-  currentBuffer = await audioCtx.decodeAudioData(arr.slice(0));
+  try{
+    currentBuffer = await decodeAudioBuffer(arr);
+  }catch(err){
+    console.error('decodeAudioData failed', err);
+    return;
+  }
   playBtn.disabled = false;
   stopBtn.disabled = true;
   renderBtn.disabled = false;

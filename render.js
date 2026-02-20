@@ -43,11 +43,33 @@ export async function renderOffline(buffer, mode, intensityVal, pVal, bassBoost=
     }
     resultBuf = outBuf;
   } else if(mode === 'bufferShuffle'){
+    // Build output by copying the original then overlaying many short shuffled slices.
     const outBuf = offlineCtx.createBuffer(buffer.numberOfChannels, buffer.length, buffer.sampleRate);
-    for(let i=0;i<buffer.length;i++){
-      const useShuffle = localRng() < intensityVal;
-      const srcIdx = useShuffle ? Math.floor(localRng()*(buffer.length)) : i;
-      for(let ch=0;ch<buffer.numberOfChannels;ch++) outBuf.getChannelData(ch)[i] = buffer.getChannelData(ch)[srcIdx];
+    // copy baseline audio
+    for(let ch=0; ch<buffer.numberOfChannels; ch++){
+      outBuf.getChannelData(ch).set(buffer.getChannelData(ch));
+    }
+    // slice parameters
+    const sliceSec = Math.max(0.02, pVal * 0.8);
+    const sliceLen = Math.max(1, Math.floor(sliceSec * buffer.sampleRate));
+    // density controls how many slices are spawned; scale with intensity to produce more rearrangement when stronger
+    const density = Math.floor(1 + intensityVal * 200);
+
+    for(let n=0; n<density; n++){
+      const dstPos = Math.floor(localRng() * Math.max(0, buffer.length - sliceLen));
+      const srcPos = Math.floor(localRng() * Math.max(0, buffer.length - sliceLen));
+      const reverse = localRng() > 0.7;
+      const playbackScale = 0.9 + localRng() * 0.4; // slight pitch/length variation
+      const gainMix = 0.4 + localRng() * 0.6; // per-slice gain
+      for(let i=0; i<sliceLen; i++){
+        const srcIdx = Math.min(buffer.length-1, srcPos + (reverse ? (sliceLen-1 - i) : i));
+        const dstIdx = Math.min(buffer.length-1, dstPos + Math.floor(i * playbackScale));
+        for(let ch=0; ch<buffer.numberOfChannels; ch++){
+          const srcVal = buffer.getChannelData(ch)[srcIdx] || 0;
+          // mix slice into output rather than replacing to avoid abrupt discontinuities/noise
+          outBuf.getChannelData(ch)[dstIdx] = (outBuf.getChannelData(ch)[dstIdx] * (1 - gainMix * intensityVal)) + (srcVal * gainMix * intensityVal);
+        }
+      }
     }
     resultBuf = outBuf;
   } else if(mode === 'tapestop'){
